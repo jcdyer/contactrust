@@ -31,3 +31,27 @@ pub fn get_contacts() -> Vec<Contact> {
         .map(|row| Contact {name: row.get("name"), email: row.get("email")})
         .collect::<Vec<Contact>>()
 }
+
+#[cfg(test)]
+mod test {
+    use super::*;
+    use serializers::Jsonable;
+
+    #[test]
+    fn test_contact_to_json() {
+        let contact = Contact { name: "Tennyson".to_string(), email: "at@lotos.org".to_string() };
+        assert_eq!(contact.to_json(), "{\"name\": \"Tennyson\", \"email\": \"at@lotos.org\"}".to_string());
+    }
+
+    #[test]
+    fn test_contact_vec_to_json() {
+        let contacts = vec!(
+            Contact { name: "Tennyson".to_string(), email: "at@lotos.org".to_string() },
+            Contact { name: "Keats".to_string(), email: "jk@lotos.org".to_string() },
+        );
+        assert_eq!(
+            contacts.to_json(),
+            "[{\"name\": \"Tennyson\", \"email\": \"at@lotos.org\"}, {\"name\": \"Keats\", \"email\": \"jk@lotos.org\"}]".to_string()
+        );
+    }
+}
